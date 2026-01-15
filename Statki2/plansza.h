@@ -35,12 +35,10 @@ public:
 	~plansza();
 	T sprawdz(int, int) const;
 	void ustawPole(int, int, T);
-	void ustawWielePol(const vector<Pola>, T);
+	void ustawWielePol(const vector<PolaS>, T);
 	void wyczysc();
-	bool czyMoznaPostawic(int x, int y, int rozmiar, int pionowo);
-	vector<Pola> pobierzDostepneMiejsca();
 	int pobierzRozmiar() const;
-
+	vector<PolaS> pobierzWolnePola();
 };
 
 
@@ -73,7 +71,7 @@ void plansza<T>::ustawPole(int x, int y, T k) {
 	}
 }
 template <class T>
-void plansza<T>::ustawWielePol(const vector<Pola> pola, T wartosc) {
+void plansza<T>::ustawWielePol(const vector<PolaS> pola, T wartosc) {
 	for (int i = 0; i < pola.size(); i++) {
 		int x = pola[i].x;
 		int y = pola[i].y;
@@ -103,58 +101,14 @@ int plansza<T>::pobierzRozmiar() const {
 	return rozmiarPola;
 }
 
-//template <class T>
-//bool plansza<T>::czyMoznaPostawic(int x, int y, int rozmiar, int pionowo) {
-//	int rozmiarPlanszy = rozmiarPola;
-//
-//	if (pionowo) {
-//		if (y + rozmiar > rozmiarPlanszy) return false;
-//	}
-//	else {
-//		if (x + rozmiar > rozmiarPlanszy) return false;
-//	}
-//
-//	int startX = x - 1;
-//	int startY = y - 1;
-//	int koniecX = pionowo ? x + 1 : x + rozmiar;
-//	int koniecY = pionowo ? y + rozmiar : y + 1;
-//
-//	for (int i = startY; i <= koniecY; i++) {
-//		for (int j = startX; j <= koniecX; j++) {
-//			if (i >= 0 && i < rozmiarPlanszy && j >= 0 && j < rozmiarPlanszy) {
-//				if (sprawdz(j, i) != PUSTY) {
-//					return false;
-//				}
-//			}
-//		}
-//	}
-//	return true;
-//}
-
-//template <class T>
-// vector<pair<int,int>> plansza<T>::pobierzDostepneMiejsca(int rozmiar, bool pionowo) {
-//	 vector<pair<int, int>> wolnePola;
-//
-//	 for (int y = 0; y < rozmiarPola; y++) {
-//		 for (int x = 0; x < rozmiarPola; x++) {
-//			 if (czyMoznaPostawic(x, y, rozmiar, pionowo))
-//				 wolnePola.push_back({ x, y });
-//		 }
-//	 }
-//
-//	 return wolnePola;
-//}
-
 template <class T>
-vector<Pola> plansza<T>::pobierzDostepneMiejsca() {
-	vector<Pola> wynik;
+vector<PolaS> plansza<T>::pobierzWolnePola(){
+	vector<PolaS> wynik;
 
 	for (int i = 0; i < rozmiarPola; i++) {
 		for (int j = 0; j < rozmiarPola; j++) {
-			if (pole[i][j] != PUSTY) {
+			if (pole[i][j] != PUSTY)
 				continue;
-			}
-
 		}
 	}
 }

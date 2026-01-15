@@ -6,7 +6,7 @@ statek::statek(int r) {
 	trafienia = vector<bool>(r, false);
 }
 
-void statek::ustawStatek(const vector<Pola>& nowePola) {
+void statek::ustawStatek(const vector<PolaS>& nowePola) {
 	if (nowePola.size() == rozmiarStatku) {
 		polaStatku = nowePola;
 	}

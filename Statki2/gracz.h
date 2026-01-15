@@ -24,7 +24,7 @@ public:
     const plansza<kratka>& pobierzPlanszeStatkow() const;
     const plansza<OkretPos*>& pobierzPlanszeStrzalow() const;
 
-    virtual void WykonajRuch() = 0;
+    /*virtual void WykonajRuch() = 0;*/
 
     int pobierzRozmiarPlanszy();
 };

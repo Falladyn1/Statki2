@@ -2,7 +2,7 @@
 #include <vector>
 using namespace std;
 
-struct Pola {
+struct PolaS {
 	int x;
 	int y;
 };
@@ -10,11 +10,11 @@ struct Pola {
 class statek {
 private:
 	int rozmiarStatku;
-	vector<Pola> polaStatku;
+	vector<PolaS> polaStatku;
 	vector<bool> trafienia;
 public:
 	statek(int);
-	void ustawStatek(const vector<Pola>&);
+	void ustawStatek(const vector<PolaS>&);
 	void ustawTrafienie(int, int);
 	bool czyTrafiony(int, int);
 	bool czyZatopiony();
