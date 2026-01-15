@@ -39,6 +39,7 @@ public:
 	void wyczysc();
 	int pobierzRozmiar() const;
 	vector<PolaS> pobierzWolnePola();
+	bool czyOtoczenieWolne(int, int) const;
 };
 
 
@@ -102,15 +103,37 @@ int plansza<T>::pobierzRozmiar() const {
 }
 
 template <class T>
+bool plansza<T>::czyOtoczenieWolne(int x, int y) const {
+	for (int dy = -1; dy <= 1; dy++) {
+		for (int dx = -1; dx <= 1; dx++) {
+
+			int nx = x + dx; // S¹siad X
+			int ny = y + dy; // S¹siad Y
+		
+			if (nx >= 0 && nx < rozmiarPola && ny >= 0 && ny < rozmiarPola) {
+
+				if (pole[ny][nx] != PUSTY) {
+					return false;
+				}
+			}
+		}
+	}
+	return true;
+}
+
+template <class T>
 vector<PolaS> plansza<T>::pobierzWolnePola(){
 	vector<PolaS> wynik;
 
 	for (int i = 0; i < rozmiarPola; i++) {
 		for (int j = 0; j < rozmiarPola; j++) {
-			if (pole[i][j] != PUSTY)
-				continue;
+			
+			if (czyOtoczenieWolne(x, y)) {
+				wynik.push_back({ x, y });
+			}
 		}
 	}
+	return wynik;
 }
 
 template <typename T>
