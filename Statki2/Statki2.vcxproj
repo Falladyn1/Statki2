@@ -123,10 +123,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="gra.cpp" />
+    <ClCompile Include="gracz.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OkretPos.cpp" />
+    <ClCompile Include="statek.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="gra.h" />
+    <ClInclude Include="gracz.h" />
+    <ClInclude Include="OkretPos.h" />
     <ClInclude Include="plansza.h" />
+    <ClInclude Include="statek.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
