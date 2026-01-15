@@ -125,8 +125,8 @@ template <class T>
 vector<PolaS> plansza<T>::pobierzWolnePola(){
 	vector<PolaS> wynik;
 
-	for (int i = 0; i < rozmiarPola; i++) {
-		for (int j = 0; j < rozmiarPola; j++) {
+	for (int y = 0; y < rozmiarPola; y++) {
+		for (int x = 0; x < rozmiarPola; x++) {
 			
 			if (czyOtoczenieWolne(x, y)) {
 				wynik.push_back({ x, y });
