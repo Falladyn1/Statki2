@@ -4,6 +4,7 @@
 #include <ctime>
 #include <vector>
 #include <algorithm>
+#include <cctype>
 
 bool gracz::initRand = false;
 
@@ -66,4 +67,63 @@ void gracz::rozmiescStatkiLosowo() {
             if (postawiono) break;
         }
     }
+}
+
+void gracz::rozmiescStatkiRecznie() {
+	int rozmiarPlanszy = statkiGracza.pobierzRozmiar();
+
+	for (int dlugosc : rozmiaryStatkow) {
+
+		bool postawiono = false;
+
+		while (!postawiono) {
+
+			cout << "\n--- TWOJA PLANSZA ---\n";
+			cout << statkiGracza;
+			cout << "Statek dlugosc: " << dlugosc << endl;
+
+			char k;
+			int w;
+			bool pionowo;
+
+			cout << "Podaj wspolrzedne (np. A 1) i orientacje (0-poziom, 1-pion): ";
+			cin >> k >> w >> pionowo;
+
+			int x = toupper(k) - 'A';
+			int y = w - 1;
+
+			bool kolizja = false;
+			vector<PolaS> polaDoZajecia;
+
+			if (pionowo) {
+				if (y + dlugosc > rozmiarPlanszy) kolizja = true;
+			}
+			else {
+				if (x + dlugosc > rozmiarPlanszy) kolizja = true;
+			}
+
+			if (!kolizja) {
+				for (int i = 0; i < dlugosc; i++) {
+					int cx = pionowo ? x : x + i;
+					int cy = pionowo ? y + i : y;
+
+					if (!statkiGracza.czyOtoczenieWolne(cx, cy)) {
+						kolizja = true;
+						break;
+					}
+					polaDoZajecia.push_back({ cx, cy });
+				}
+			}
+
+			if (!kolizja) {
+				statkiGracza.ustawWielePol(polaDoZajecia, ZAJETY);
+				postawiono = true;
+			}
+			else {
+				cout << "Blad! Kolizja lub poza plansza." << endl;
+			}
+		}
+	}
+	cout << "\n--- GOTOWE ---\n";
+	cout << statkiGracza;
 }
