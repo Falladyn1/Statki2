@@ -17,12 +17,12 @@ public:
     gracz();
 
     const plansza<kratka>& pobierzPlanszeStatkow() const;
-    const plansza<OkretPos*>& pobierzPlanszeStrzalow() const;
+    plansza<OkretPos*>& pobierzPlanszeStrzalow();
 
     void rozmiescStatkiLosowo();
     void rozmiescStatkiRecznie();
 
     OkretPos* sprawdzStrzalPrzeciwnika(int x, int y);
 
-    virtual void wykonajRuch(gracz& przeciwnik) = 0;
+    virtual PolaS wykonajRuch() = 0;
 };

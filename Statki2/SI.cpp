@@ -7,7 +7,7 @@ using namespace std;
 SI::SI() : gracz() {
 }
 
-void SI::wykonajRuch(gracz& przeciwnik) {
+PolaS SI::wykonajRuch() {
     int rozmiar = strzalyGracza.pobierzRozmiar();
     int x, y;
 
@@ -16,15 +16,5 @@ void SI::wykonajRuch(gracz& przeciwnik) {
         y = rand() % rozmiar;
     } while (strzalyGracza.sprawdz(x, y) != nullptr);
 
-    cout << "SI: " << char('A' + x) << " " << y + 1 << " -> ";
-
-    OkretPos* wynik = przeciwnik.sprawdzStrzalPrzeciwnika(x, y);
-    strzalyGracza.ustawPole(x, y, wynik);
-
-    if (wynik->s != nullptr) {
-        cout << "Trafiony!" << endl;
-    }
-    else {
-        cout << "Pudlo." << endl;
-    }
+    return { x, y };
 }

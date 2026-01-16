@@ -4,5 +4,5 @@
 class SI : public gracz {
 public:
     SI();
-    void wykonajRuch(gracz& przeciwnik);
+    PolaS wykonajRuch();
 };

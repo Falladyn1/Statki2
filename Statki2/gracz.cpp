@@ -18,7 +18,7 @@ const plansza<kratka>& gracz::pobierzPlanszeStatkow() const {
     return statkiGracza;
 }
 
-const plansza<OkretPos*>& gracz::pobierzPlanszeStrzalow() const {
+plansza<OkretPos*>& gracz::pobierzPlanszeStrzalow() {
     return strzalyGracza;
 }
 

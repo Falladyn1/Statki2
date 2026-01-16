@@ -6,7 +6,7 @@ using namespace std;
 czlowiek::czlowiek() : gracz() {
 }
 
-void czlowiek::wykonajRuch(gracz& przeciwnik) {
+PolaS czlowiek::wykonajRuch() { 
     int rozmiar = strzalyGracza.pobierzRozmiar();
     int x = -1, y = -1;
     bool ruchPoprawny = false;
@@ -32,14 +32,5 @@ void czlowiek::wykonajRuch(gracz& przeciwnik) {
             cout << "Bledne wspolrzedne." << endl;
         }
     }
-
-    OkretPos* wynik = przeciwnik.sprawdzStrzalPrzeciwnika(x, y);
-    strzalyGracza.ustawPole(x, y, wynik);
-
-    if (wynik->s == nullptr) {
-        cout << "-> Pudlo." << endl;
-    }
-    else {
-        cout << "-> Trafiony." << endl;
-    }
+    return { x, y };
 }

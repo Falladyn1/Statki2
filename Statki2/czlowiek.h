@@ -7,5 +7,5 @@ class czlowiek :
 {
 public:
     czlowiek();
-    void wykonajRuch(gracz& przeciwnik);
+    PolaS wykonajRuch();
 };

@@ -6,27 +6,42 @@
 using namespace std;
 
 int main() {
-    srand(time(NULL));
-
     czlowiek gracz;
     SI komputer;
 
+    cout << "Rozmieszczanie statkow..." << endl;
     gracz.rozmiescStatkiLosowo();
     komputer.rozmiescStatkiLosowo();
 
-    cout << "\n--- TWOJA FLOTA ---" << endl;
-    cout << gracz.pobierzPlanszeStatkow();
+    bool graTrwa = true;
+    while (graTrwa) {
+        cout << "\n--- TWOJA TURA ---" << endl;
+        cout << gracz.pobierzPlanszeStatkow();
+        cout << gracz.pobierzPlanszeStrzalow();
 
-    cout << "\n--- RADAR (STRZALY) ---" << endl;
-    cout << gracz.pobierzPlanszeStrzalow();
+        PolaS celGracza = gracz.wykonajRuch();
 
-    gracz.wykonajRuch(komputer);
+        OkretPos* wynikGracza = komputer.sprawdzStrzalPrzeciwnika(celGracza.x, celGracza.y);
+
+        gracz.pobierzPlanszeStrzalow().ustawPole(celGracza.x, celGracza.y, wynikGracza);
+
+        if (wynikGracza->s) cout << "Trafiles!" << endl;
+        else cout << "Pudlo." << endl;
 
 
-    cout << "\n[Tura Komputera]" << endl;
-    komputer.wykonajRuch(gracz);
+        cout << "\n--- TURA KOMPUTERA ---" << endl;
 
-    cout << "\nTwoja flota po ataku:" << endl;
-    cout << gracz.pobierzPlanszeStatkow();
+        PolaS celSI = komputer.wykonajRuch();
+        cout << "Komputer strzela w: " << char('A' + celSI.x) << celSI.y + 1 << endl;
+
+        OkretPos* wynikSI = gracz.sprawdzStrzalPrzeciwnika(celSI.x, celSI.y);
+
+        komputer.pobierzPlanszeStrzalow().ustawPole(celSI.x, celSI.y, wynikSI);
+
+        if (wynikSI->s) cout << "Komputer trafil!" << endl;
+        else cout << "Komputer spudlowal." << endl;
+
+    }
+
     return 0;
 }
