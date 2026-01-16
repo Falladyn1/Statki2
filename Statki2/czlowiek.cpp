@@ -7,6 +7,13 @@ czlowiek::czlowiek() : gracz() {
 }
 
 void czlowiek::wykonajRuch(gracz& przeciwnik){
+	cout << "\n--------------------------------------\n";
+	cout << "TWOJE STATKI (O-statek, X-trafiony):" << endl;
+	cout << this->pobierzPlanszeStatkow(); 
+	cout << "TWOJE STRZALY (Gdzie juz strzelales):" << endl;
+	cout << this->pobierzPlanszeStrzalow();
+	cout << "--------------------------------------\n";
+
 	char wierszZnak;
 	int kolumnaLiczba;
 	int wiersz, kolumna;
