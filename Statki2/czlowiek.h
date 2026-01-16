@@ -7,6 +7,6 @@ class czlowiek :
 {
 public:
     czlowiek();
-    void wykonajRuch(gracz& przeciwnik);
+    void wykonajRuch();
 };
 
