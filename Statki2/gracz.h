@@ -20,5 +20,7 @@ public:
     void rozmiescStatkiLosowo();
     void rozmiescStatkiRecznie();
 
-    virtual void WykonajRuch() = 0;
+    
+
+    virtual void wykonajRuch(gracz&) = 0;
 };

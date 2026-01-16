@@ -25,8 +25,20 @@ const plansza<OkretPos*>& gracz::pobierzPlanszeStrzalow() const {
 
 bool czyJestNaLiscie(const vector<PolaS>& lista, int x, int y) {
     for (const PolaS p : lista) {
-        if (p.x == x & p.y == y)
+        if (p.x == x && p.y == y)
             return true;
+    }
+    return false;
+}
+
+bool parsujWspolrzedne(char k, int w, int rozmiarPlanszy, int& outX, int& outY) {
+    int x = toupper(k) - 'A';
+    int y = w - 1;
+
+    if (x >= 0 && x < rozmiarPlanszy && y >= 0 && y < rozmiarPlanszy) {
+        outX = x;
+        outY = y;
+        return true;
     }
     return false;
 }
@@ -61,7 +73,7 @@ void gracz::rozmiescStatkiLosowo() {
                 if (czyPasuje) {
                     statkiGracza.ustawWielePol(buforStatku, ZAJETY);
                     postawiono = true;
-                    break; // Przerywamy pêtlê kierunków
+                    break;
                 }
             }
             if (postawiono) break;
@@ -70,60 +82,68 @@ void gracz::rozmiescStatkiLosowo() {
 }
 
 void gracz::rozmiescStatkiRecznie() {
-	int rozmiarPlanszy = statkiGracza.pobierzRozmiar();
+    int rozmiarPlanszy = statkiGracza.pobierzRozmiar();
 
-	for (int dlugosc : rozmiaryStatkow) {
+    for (int dlugosc : rozmiaryStatkow) {
+        bool postawiono = false;
 
-		bool postawiono = false;
+        while (!postawiono) {
+            cout << "\n--- TWOJA PLANSZA ---\n";
+            cout << statkiGracza;
+            cout << "Ustaw statek o dlugosci: " << dlugosc << endl;
 
-		while (!postawiono) {
+            char k;
+            int w;
+            bool pionowo;
 
-			cout << "\n--- TWOJA PLANSZA ---\n";
-			cout << statkiGracza;
-			cout << "Statek dlugosc: " << dlugosc << endl;
+            cout << "Podaj wspolrzedne (np. A 1) i orientacje (0-poziom, 1-pion): ";
+            cin >> k >> w >> pionowo;
 
-			char k;
-			int w;
-			bool pionowo;
+            if (cin.fail()) {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "Blad wczytywania! Sprobuj ponownie." << endl;
+                continue;
+            }
 
-			cout << "Podaj wspolrzedne (np. A 1) i orientacje (0-poziom, 1-pion): ";
-			cin >> k >> w >> pionowo;
+            int x, y;
+            if (!parsujWspolrzedne(k, w, rozmiarPlanszy, x, y)) {
+                cout << "Nieprawidlowe wspolrzedne lub poza plansza!" << endl;
+                continue;
+            }
 
-			int x = toupper(k) - 'A';
-			int y = w - 1;
+            bool kolizja = false;
+            vector<PolaS> polaDoZajecia;
 
-			bool kolizja = false;
-			vector<PolaS> polaDoZajecia;
+            if (pionowo) {
+                if (y + dlugosc > rozmiarPlanszy) kolizja = true;
+            }
+            else {
+                if (x + dlugosc > rozmiarPlanszy) kolizja = true;
+            }
 
-			if (pionowo) {
-				if (y + dlugosc > rozmiarPlanszy) kolizja = true;
-			}
-			else {
-				if (x + dlugosc > rozmiarPlanszy) kolizja = true;
-			}
+            if (!kolizja) {
+                for (int i = 0; i < dlugosc; i++) {
+                    int cx = pionowo ? x : x + i;
+                    int cy = pionowo ? y + i : y;
 
-			if (!kolizja) {
-				for (int i = 0; i < dlugosc; i++) {
-					int cx = pionowo ? x : x + i;
-					int cy = pionowo ? y + i : y;
+                    if (!statkiGracza.czyOtoczenieWolne(cx, cy)) {
+                        kolizja = true;
+                        break;
+                    }
+                    polaDoZajecia.push_back({ cx, cy });
+                }
+            }
 
-					if (!statkiGracza.czyOtoczenieWolne(cx, cy)) {
-						kolizja = true;
-						break;
-					}
-					polaDoZajecia.push_back({ cx, cy });
-				}
-			}
-
-			if (!kolizja) {
-				statkiGracza.ustawWielePol(polaDoZajecia, ZAJETY);
-				postawiono = true;
-			}
-			else {
-				cout << "Blad! Kolizja lub poza plansza." << endl;
-			}
-		}
-	}
-	cout << "\n--- GOTOWE ---\n";
-	cout << statkiGracza;
+            if (!kolizja) {
+                statkiGracza.ustawWielePol(polaDoZajecia, ZAJETY);
+                postawiono = true;
+            }
+            else {
+                cout << "Blad! Statek nie miesci sie lub dotyka innego statku." << endl;
+            }
+        }
+    }
+    cout << "\n--- GOTOWE ---\n";
+    cout << statkiGracza;
 }
