@@ -16,12 +16,14 @@ public:
         x = _x;
         y = _y;
     }
-
 };
 
 inline ostream& operator<<(ostream& os, const OkretPos* p) {
-    if (p == nullptr || p->s == nullptr) {
+    if (p == nullptr) {
         os << ".";
+    }
+    else if (p->s == nullptr) {
+        os << "*";
     }
     else if (p->s->czyZatopiony()) {
         os << "#";

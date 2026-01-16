@@ -18,28 +18,31 @@ const plansza<kratka>& gracz::pobierzPlanszeStatkow() const {
     return statkiGracza;
 }
 
-const plansza<kratka>& gracz::pobierzPlanszeStrzalow() const {
+const plansza<OkretPos*>& gracz::pobierzPlanszeStrzalow() const {
     return strzalyGracza;
 }
 
-kratka gracz::sprawdzStrzalPrzeciwnika(int x, int y) {
+OkretPos* gracz::sprawdzStrzalPrzeciwnika(int x, int y) {
     kratka stan = statkiGracza.sprawdz(x, y);
-    if (stan == ZAJETY) {
-        statkiGracza.ustawPole(x, y, TRAFIONY);
-        return TRAFIONY;
+
+    if (stan != PUSTY && stan != PUDLO) {
+        for (int i = 0; i < flota.size(); i++) {
+            flota[i].ustawTrafienie(x, y);
+
+            if (flota[i].czyTrafiony(x, y)) {
+                statkiGracza.ustawPole(x, y, TRAFIONY);
+                return new OkretPos(&flota[i], x, y);
+            }
+        }
     }
-    else if (stan == TRAFIONY) {
-        return TRAFIONY;
-    }
-    else {
-        statkiGracza.ustawPole(x, y, PUDLO);
-        return PUDLO;
-    }
+
+    statkiGracza.ustawPole(x, y, PUDLO);
+    return new OkretPos(nullptr, x, y);
 }
 
 bool czyJestNaLiscie(const vector<PolaS>& lista, int x, int y) {
-    for (const PolaS p : lista) {
-        if (p.x == x && p.y == y) return true;
+    for (int i = 0; i < lista.size(); i++) {
+        if (lista[i].x == x && lista[i].y == y) return true;
     }
     return false;
 }
@@ -56,28 +59,40 @@ bool parsujWspolrzedne(char k, int w, int rozmiarPlanszy, int& outX, int& outY) 
 }
 
 void gracz::rozmiescStatkiLosowo() {
-    for (int r : rozmiaryStatkow) {
+    for (int i = 0; i < 10; i++) {
+        int r = rozmiaryStatkow[i];
         vector<PolaS> wolnePola = statkiGracza.pobierzWolnePola();
         random_shuffle(wolnePola.begin(), wolnePola.end());
         bool postawiono = false;
 
-        for (PolaS start : wolnePola) {
+        for (int j = 0; j < wolnePola.size(); j++) {
+            PolaS start = wolnePola[j];
             bool orientacja = rand() % 2;
             bool kierunki[2] = { orientacja, !orientacja };
-            for (bool pionowo : kierunki) {
+
+            for (int k = 0; k < 2; k++) {
+                bool pionowo = kierunki[k];
                 vector<PolaS> buforStatku;
                 bool czyPasuje = true;
-                for (int i = 0; i < r; i++) {
-                    int x = pionowo ? start.x : start.x + i;
-                    int y = pionowo ? start.y + i : start.y;
+
+                for (int l = 0; l < r; l++) {
+                    int x = pionowo ? start.x : start.x + l;
+                    int y = pionowo ? start.y + l : start.y;
+
                     if (!czyJestNaLiscie(wolnePola, x, y)) {
                         czyPasuje = false;
                         break;
                     }
                     buforStatku.push_back({ x, y });
                 }
+
                 if (czyPasuje) {
                     statkiGracza.ustawWielePol(buforStatku, ZAJETY);
+
+                    statek s(r);
+                    s.ustawStatek(buforStatku);
+                    flota.push_back(s);
+
                     postawiono = true;
                     break;
                 }
@@ -89,27 +104,32 @@ void gracz::rozmiescStatkiLosowo() {
 
 void gracz::rozmiescStatkiRecznie() {
     int rozmiarPlanszy = statkiGracza.pobierzRozmiar();
-    for (int dlugosc : rozmiaryStatkow) {
+
+    for (int i = 0; i < 10; i++) {
+        int dlugosc = rozmiaryStatkow[i];
         bool postawiono = false;
+
         while (!postawiono) {
             cout << "\n--- TWOJA PLANSZA ---\n" << statkiGracza;
             cout << "Ustaw statek o dlugosci: " << dlugosc << endl;
+
             char k;
             int w;
             bool pionowo;
             cout << "Podaj wspolrzedne (np. A 1) i orientacje (0-poziom, 1-pion): ";
             cin >> k >> w >> pionowo;
 
-            if (cin.fail()) {
-                cin.clear();
-                cin.ignore(1000, '\n');
+            int x = toupper(k) - 'A';
+            int y = w - 1;
+
+            if (x < 0 || x >= rozmiarPlanszy || y < 0 || y >= rozmiarPlanszy) {
+                cout << "Bledne wspolrzedne!" << endl;
                 continue;
             }
-            int x, y;
-            if (!parsujWspolrzedne(k, w, rozmiarPlanszy, x, y)) continue;
 
             bool kolizja = false;
             vector<PolaS> polaDoZajecia;
+
             if (pionowo) {
                 if (y + dlugosc > rozmiarPlanszy) kolizja = true;
             }
@@ -118,9 +138,10 @@ void gracz::rozmiescStatkiRecznie() {
             }
 
             if (!kolizja) {
-                for (int i = 0; i < dlugosc; i++) {
-                    int cx = pionowo ? x : x + i;
-                    int cy = pionowo ? y + i : y;
+                for (int j = 0; j < dlugosc; j++) {
+                    int cx = pionowo ? x : x + j;
+                    int cy = pionowo ? y + j : y;
+
                     if (!statkiGracza.czyOtoczenieWolne(cx, cy)) {
                         kolizja = true;
                         break;
@@ -131,7 +152,15 @@ void gracz::rozmiescStatkiRecznie() {
 
             if (!kolizja) {
                 statkiGracza.ustawWielePol(polaDoZajecia, ZAJETY);
+
+                statek s(dlugosc);
+                s.ustawStatek(polaDoZajecia);
+                flota.push_back(s);
+
                 postawiono = true;
+            }
+            else {
+                cout << "Nie mozna tu postawic statku!" << endl;
             }
         }
     }

@@ -128,6 +128,7 @@
     <ClCompile Include="gracz.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OkretPos.cpp" />
+    <ClCompile Include="SI.cpp" />
     <ClCompile Include="statek.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +137,7 @@
     <ClInclude Include="gracz.h" />
     <ClInclude Include="OkretPos.h" />
     <ClInclude Include="plansza.h" />
+    <ClInclude Include="SI.h" />
     <ClInclude Include="statek.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,11 +1,8 @@
 #pragma once
-#include <iostream>
 #include "gracz.h"
 
-class czlowiek :
-    public gracz
-{
+class SI : public gracz {
 public:
-    czlowiek();
+    SI();
     void wykonajRuch(gracz& przeciwnik);
 };

@@ -1,6 +1,5 @@
 #include "statek.h"
 
-
 statek::statek(int r) {
 	rozmiarStatku = r;
 	trafienia = vector<bool>(r, false);

@@ -18,8 +18,5 @@ public:
 	void ustawTrafienie(int, int);
 	bool czyTrafiony(int, int);
 	bool czyZatopiony();
-
 	int pobierzRozmiar() const;
-
-
 };

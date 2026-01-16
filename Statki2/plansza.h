@@ -23,7 +23,7 @@ inline ostream& operator<<(ostream& os, const kratka& k) {
 
 template <class T>
 class plansza {
-	int rozmiarPola; // rozmiar*rozmiar
+	int rozmiarPola;
 	T** pole;
 public:
 	plansza() {
@@ -41,8 +41,6 @@ public:
 	vector<PolaS> pobierzWolnePola();
 	bool czyOtoczenieWolne(int, int) const;
 };
-
-
 
 template <class T>
 plansza<T>::plansza(int r) {
@@ -64,7 +62,6 @@ T plansza<T>::sprawdz(int x, int y) const {
 	return T{};
 }
 
-
 template <class T>
 void plansza<T>::ustawPole(int x, int y, T k) {
 	if (x >= 0 && x < rozmiarPola && y >= 0 && y < rozmiarPola) {
@@ -73,7 +70,7 @@ void plansza<T>::ustawPole(int x, int y, T k) {
 }
 template <class T>
 void plansza<T>::ustawWielePol(const vector<PolaS> pola, T wartosc) {
-	for (int i = 0; i < pola.size(); i++) {
+	for (size_t i = 0; i < pola.size(); i++) {
 		int x = pola[i].x;
 		int y = pola[i].y;
 		ustawPole(x, y, wartosc);
@@ -107,11 +104,10 @@ bool plansza<T>::czyOtoczenieWolne(int x, int y) const {
 	for (int dy = -1; dy <= 1; dy++) {
 		for (int dx = -1; dx <= 1; dx++) {
 
-			int nx = x + dx; // S¹siad X
-			int ny = y + dy; // S¹siad Y
-		
-			if (nx >= 0 && nx < rozmiarPola && ny >= 0 && ny < rozmiarPola) {
+			int nx = x + dx;
+			int ny = y + dy;
 
+			if (nx >= 0 && nx < rozmiarPola && ny >= 0 && ny < rozmiarPola) {
 				if (pole[ny][nx] != PUSTY) {
 					return false;
 				}
@@ -122,12 +118,11 @@ bool plansza<T>::czyOtoczenieWolne(int x, int y) const {
 }
 
 template <class T>
-vector<PolaS> plansza<T>::pobierzWolnePola(){
+vector<PolaS> plansza<T>::pobierzWolnePola() {
 	vector<PolaS> wynik;
 
 	for (int y = 0; y < rozmiarPola; y++) {
 		for (int x = 0; x < rozmiarPola; x++) {
-			
 			if (czyOtoczenieWolne(x, y)) {
 				wynik.push_back({ x, y });
 			}
