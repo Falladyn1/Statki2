@@ -14,7 +14,7 @@ PolaS SI::wykonajRuch() {
     do {
         x = rand() % rozmiar;
         y = rand() % rozmiar;
-    } while (strzalyGracza.sprawdz(x, y) != nullptr);
+    } while (strzalyGracza.sprawdz(x, y) != PUSTY);
 
     return { x, y };
 }

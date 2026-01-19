@@ -23,11 +23,17 @@ int main() {
 
         OkretPos* wynikGracza = komputer.sprawdzStrzalPrzeciwnika(celGracza.x, celGracza.y);
 
-        gracz.pobierzPlanszeStrzalow().ustawPole(celGracza.x, celGracza.y, wynikGracza);
+        kratka wynikKratka = PUDLO;
+        if (wynikGracza->s != nullptr) {
+            wynikKratka = TRAFIONY;
+        }
+
+        gracz.pobierzPlanszeStrzalow().ustawPole(celGracza.x, celGracza.y, wynikKratka);
 
         if (wynikGracza->s) cout << "Trafiles!" << endl;
         else cout << "Pudlo." << endl;
 
+        delete wynikGracza;
 
         cout << "\n--- TURA KOMPUTERA ---" << endl;
 
@@ -36,11 +42,13 @@ int main() {
 
         OkretPos* wynikSI = gracz.sprawdzStrzalPrzeciwnika(celSI.x, celSI.y);
 
-        komputer.pobierzPlanszeStrzalow().ustawPole(celSI.x, celSI.y, wynikSI);
+        kratka wynikKratkaSI = (wynikSI->s != nullptr) ? TRAFIONY : PUDLO;
+        komputer.pobierzPlanszeStrzalow().ustawPole(celSI.x, celSI.y, wynikKratkaSI);
 
         if (wynikSI->s) cout << "Komputer trafil!" << endl;
         else cout << "Komputer spudlowal." << endl;
 
+        delete wynikSI;
     }
 
     return 0;

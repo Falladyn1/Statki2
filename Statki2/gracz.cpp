@@ -14,29 +14,28 @@ gracz::gracz() : statkiGracza(10), strzalyGracza(10) {
     }
 }
 
-const plansza<kratka>& gracz::pobierzPlanszeStatkow() const {
+const plansza<OkretPos*>& gracz::pobierzPlanszeStatkow() const {
     return statkiGracza;
 }
 
-plansza<OkretPos*>& gracz::pobierzPlanszeStrzalow() {
+plansza<kratka>& gracz::pobierzPlanszeStrzalow() {
     return strzalyGracza;
 }
 
 OkretPos* gracz::sprawdzStrzalPrzeciwnika(int x, int y) {
-    kratka stan = statkiGracza.sprawdz(x, y);
+    OkretPos* pole = statkiGracza.sprawdz(x, y);
 
-    if (stan != PUSTY && stan != PUDLO) {
-        for (int i = 0; i < flota.size(); i++) {
-            flota[i].ustawTrafienie(x, y);
-
-            if (flota[i].czyTrafiony(x, y)) {
-                statkiGracza.ustawPole(x, y, TRAFIONY);
-                return new OkretPos(&flota[i], x, y);
-            }
+    if (pole != nullptr) {
+        if (pole->s != nullptr) {
+            pole->s->ustawTrafienie(x, y);
+            return new OkretPos(pole->s, x, y);
+        }
+        else {
+            return new OkretPos(nullptr, x, y);
         }
     }
 
-    statkiGracza.ustawPole(x, y, PUDLO);
+    statkiGracza.ustawPole(x, y, new OkretPos(nullptr, x, y));
     return new OkretPos(nullptr, x, y);
 }
 
@@ -59,6 +58,10 @@ bool parsujWspolrzedne(char k, int w, int rozmiarPlanszy, int& outX, int& outY) 
 }
 
 void gracz::rozmiescStatkiLosowo() {
+    flota.clear();
+    flota.reserve(10);
+    statkiGracza.wyczysc();
+
     for (int i = 0; i < 10; i++) {
         int r = rozmiaryStatkow[i];
         vector<PolaS> wolnePola = statkiGracza.pobierzWolnePola();
@@ -87,11 +90,15 @@ void gracz::rozmiescStatkiLosowo() {
                 }
 
                 if (czyPasuje) {
-                    statkiGracza.ustawWielePol(buforStatku, ZAJETY);
-
                     statek s(r);
                     s.ustawStatek(buforStatku);
                     flota.push_back(s);
+
+                    statek* wskaznikNaStatek = &flota.back();
+
+                    for (auto p : buforStatku) {
+                        statkiGracza.ustawPole(p.x, p.y, new OkretPos(wskaznikNaStatek, p.x, p.y));
+                    }
 
                     postawiono = true;
                     break;
@@ -104,6 +111,9 @@ void gracz::rozmiescStatkiLosowo() {
 
 void gracz::rozmiescStatkiRecznie() {
     int rozmiarPlanszy = statkiGracza.pobierzRozmiar();
+    flota.clear();
+    flota.reserve(10);
+    statkiGracza.wyczysc();
 
     for (int i = 0; i < 10; i++) {
         int dlugosc = rozmiaryStatkow[i];
@@ -151,11 +161,14 @@ void gracz::rozmiescStatkiRecznie() {
             }
 
             if (!kolizja) {
-                statkiGracza.ustawWielePol(polaDoZajecia, ZAJETY);
-
                 statek s(dlugosc);
                 s.ustawStatek(polaDoZajecia);
                 flota.push_back(s);
+                statek* wskaznikNaStatek = &flota.back();
+
+                for (auto p : polaDoZajecia) {
+                    statkiGracza.ustawPole(p.x, p.y, new OkretPos(wskaznikNaStatek, p.x, p.y));
+                }
 
                 postawiono = true;
             }

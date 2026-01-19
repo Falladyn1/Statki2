@@ -5,10 +5,10 @@
 
 class manager
 {
-	gracz* g1, * g2;
+	gracz *g1, *g2;
 	~manager();
 	manager();
 	void utworzGraczy();
-	void Start();
+	void Gra();
 };
 

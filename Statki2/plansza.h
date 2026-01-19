@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "statek.h"
+
 using namespace std;
 
 enum kratka {
@@ -88,10 +89,12 @@ void plansza<T>::wyczysc() {
 
 template <class T>
 plansza<T>::~plansza() {
-	for (int i = 0; i < rozmiarPola; i++) {
-		delete[] pole[i];
+	if (pole != nullptr) {
+		for (int i = 0; i < rozmiarPola; i++) {
+			delete[] pole[i];
+		}
+		delete[] pole;
 	}
-	delete[] pole;
 }
 
 template <class T>
@@ -108,7 +111,7 @@ bool plansza<T>::czyOtoczenieWolne(int x, int y) const {
 			int ny = y + dy;
 
 			if (nx >= 0 && nx < rozmiarPola && ny >= 0 && ny < rozmiarPola) {
-				if (pole[ny][nx] != PUSTY) {
+				if (pole[ny][nx] != T{}) {
 					return false;
 				}
 			}

@@ -6,7 +6,7 @@ using namespace std;
 czlowiek::czlowiek() : gracz() {
 }
 
-PolaS czlowiek::wykonajRuch() { 
+PolaS czlowiek::wykonajRuch() {
     int rozmiar = strzalyGracza.pobierzRozmiar();
     int x = -1, y = -1;
     bool ruchPoprawny = false;
@@ -21,7 +21,7 @@ PolaS czlowiek::wykonajRuch() {
         y = w - 1;
 
         if (x >= 0 && x < rozmiar && y >= 0 && y < rozmiar) {
-            if (strzalyGracza.sprawdz(x, y) == nullptr) {
+            if (strzalyGracza.sprawdz(x, y) == PUSTY) {
                 ruchPoprawny = true;
             }
             else {

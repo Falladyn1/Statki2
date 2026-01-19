@@ -9,15 +9,15 @@ protected://zmiana z private na protected zeby klasy SI i czlowiek mialy dostep 
     int rozmiaryStatkow[10] = { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 };
 
     vector<statek> flota;
-    plansza<kratka> statkiGracza;
-    plansza<OkretPos*> strzalyGracza;
+    plansza<OkretPos*> statkiGracza;
+    plansza<kratka> strzalyGracza;
 
 public:
     static bool initRand;
     gracz();
 
-    const plansza<kratka>& pobierzPlanszeStatkow() const;
-    plansza<OkretPos*>& pobierzPlanszeStrzalow();
+    const plansza<OkretPos*>& pobierzPlanszeStatkow() const;
+    plansza<kratka>& pobierzPlanszeStrzalow();
 
     void rozmiescStatkiLosowo();
     void rozmiescStatkiRecznie();

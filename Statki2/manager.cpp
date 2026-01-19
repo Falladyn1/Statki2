@@ -11,10 +11,8 @@ manager::~manager() {
 }
 
 void manager::utworzGraczy() {
-	if (g1 != NULL && g2 != NULL) {
-		delete g1;
-		delete g2;
-	}
+	delete g1;
+	delete g2;
 
 	bool G1Poprawny = false;
 	bool G2Poprawny = false;
@@ -55,5 +53,9 @@ void manager::utworzGraczy() {
 		}
 	}
 
+}
+
+void manager::Gra() {
+	
 }
 	
