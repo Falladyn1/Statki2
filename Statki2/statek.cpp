@@ -22,7 +22,7 @@ void statek::ustawTrafienie(int x, int y) {
 	}
 }
 
-bool statek::czyTrafiony(int x, int y) {
+bool statek::czyTrafiony(int x, int y) const{
 	if (polaStatku.empty()) return false;
 
 	for (int i = 0; i < rozmiarStatku; i++) {
@@ -33,7 +33,7 @@ bool statek::czyTrafiony(int x, int y) {
 	return false;
 }
 
-bool statek::czyZatopiony() {
+bool statek::czyZatopiony() const{
 	for (bool t : trafienia) {
 		if (!t) return false;
 	}

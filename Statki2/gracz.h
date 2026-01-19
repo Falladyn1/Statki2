@@ -21,7 +21,8 @@ public:
 
     void rozmiescStatkiLosowo();
     void rozmiescStatkiRecznie();
-
+    
+    bool czyPrzegrana() const;
     OkretPos* sprawdzStrzalPrzeciwnika(int x, int y);
 
     virtual PolaS wykonajRuch() = 0;

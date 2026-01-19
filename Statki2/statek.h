@@ -16,7 +16,7 @@ public:
 	statek(int);
 	void ustawStatek(const vector<PolaS>&);
 	void ustawTrafienie(int, int);
-	bool czyTrafiony(int, int);
-	bool czyZatopiony();
+	bool czyTrafiony(int, int) const;
+	bool czyZatopiony() const;
 	int pobierzRozmiar() const;
 };

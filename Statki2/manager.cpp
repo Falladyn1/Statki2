@@ -1,8 +1,14 @@
 #include "manager.h"
+#include <iostream>
+#include <windows.h>
+
+using namespace std;
 
 manager::manager() {
 	g1 = 0;
 	g2 = 0;
+	typG1 = 0;
+	typG2 = 0;
 }
 
 manager::~manager() {
@@ -11,51 +17,154 @@ manager::~manager() {
 }
 
 void manager::utworzGraczy() {
-	delete g1;
-	delete g2;
+	if (g1 != NULL) delete g1;
+	if (g2 != NULL) delete g2;
+	g1 = 0;
+	g2 = 0;
 
 	bool G1Poprawny = false;
 	bool G2Poprawny = false;
 
-	while(!G1Poprawny) {
-		int wyborG1;
-		cout << "Kto bedzie grac jako gracz 1? (1 - czlowiek, 2 - bot)";
-		cin >> wyborG1;
+	while (!G1Poprawny) {
+		cout << "Kto bedzie grac jako gracz 1? (1 - czlowiek, 2 - SI): ";
+		cin >> typG1;
 
-		if (wyborG1 == 1) {
+		if (typG1 == 1) {
 			g1 = new czlowiek();
 			G1Poprawny = true;
 		}
-		else if (wyborG1 == 2) {
+		else if (typG1 == 2) {
 			g1 = new SI();
 			G1Poprawny = true;
 		}
-		else{
-			printf("Niepoprawny wybor");
+		else {
+			cout << "Niepoprawny wybor" << endl;
 		}
 	}
 
 	while (!G2Poprawny) {
-		int wyborG2;
-		cout << "Kto bedzie grac jako gracz 1? (1 - czlowiek, 2 - bot)";
-		cin >> wyborG2;
+		cout << "Kto bedzie grac jako gracz 2? (1 - czlowiek, 2 - SI): ";
+		cin >> typG2;
 
-		if (wyborG2 == 1) {
+		if (typG2 == 1) {
 			g2 = new czlowiek();
 			G2Poprawny = true;
 		}
-		else if (wyborG2 == 2) {
+		else if (typG2 == 2) {
 			g2 = new SI();
-			G1Poprawny = true;
+			G2Poprawny = true;
 		}
 		else {
-			printf("Niepoprawny wybor");
+			cout << "Niepoprawny wybor" << endl;
 		}
 	}
-
 }
 
 void manager::Gra() {
-	
+	char ponownaGra = 't';
+	do {
+		utworzGraczy();
+		cout << "---FAZA PRZYGOTOWAN---" << endl;
+
+		cout << "Gracz 1 przygotowuje flote" << endl;
+		if (typG1 == 1) {
+			int wybor = 0;
+			while (wybor != 1 && wybor != 2) {
+				cout << "Jak chcesz ustawic statki (1 - losowo, 2 - recznie): ";
+				cin >> wybor;
+			}
+			if (wybor == 1) g1->rozmiescStatkiLosowo();
+			else g1->rozmiescStatkiRecznie();
+		}
+		else {
+			cout << "SI rozmieszcza statki losowo..." << endl;
+			g1->rozmiescStatkiLosowo();
+		}
+		system("cls");
+
+		cout << "Gracz 2 przygotowuje flote" << endl;
+		if (typG2 == 1) {
+			int wybor = 0;
+			while (wybor != 1 && wybor != 2) {
+				cout << "Jak chcesz ustawic statki (1 - losowo, 2 - recznie): ";
+				cin >> wybor;
+			}
+			if (wybor == 1) g2->rozmiescStatkiLosowo();
+			else g2->rozmiescStatkiRecznie();
+		}
+		else {
+			cout << "SI rozmieszcza statki losowo..." << endl;
+			g2->rozmiescStatkiLosowo();
+		}
+		system("cls");
+
+		bool graTrwa = true;
+		gracz* aktualnyGracz = g1;
+		gracz* przeciwnik = g2;
+		int nrGracza = 1;
+		int typAktualnegoGracza = typG1;
+
+		while (graTrwa) {
+			cout << "\n========================================" << endl;
+			cout << " TURA GRACZA " << nrGracza << endl;
+			cout << "========================================" << endl;
+
+			if (typAktualnegoGracza == 1) {
+				cout << "TWOJE STATKI:" << endl;
+				cout << aktualnyGracz->pobierzPlanszeStatkow();
+				cout << "TWOJE STRZALY:" << endl;
+				cout << aktualnyGracz->pobierzPlanszeStrzalow();
+			}
+
+			PolaS cel = aktualnyGracz->wykonajRuch();
+			OkretPos* wynikTrafienia = przeciwnik->sprawdzStrzalPrzeciwnika(cel.x, cel.y);
+
+			kratka stanKratki = PUDLO;
+			if (wynikTrafienia->s != 0) {
+				stanKratki = TRAFIONY;
+			}
+
+			aktualnyGracz->pobierzPlanszeStrzalow().ustawPole(cel.x, cel.y, stanKratki);
+
+			system("cls");
+			cout << "Gracz " << nrGracza << " strzela w " << char('A' + cel.x) << cel.y + 1 << endl;
+
+			if (wynikTrafienia->s != 0) {
+				cout << "TRAFIONY!" << endl;
+				if (wynikTrafienia->s->czyZatopiony()) cout << "I ZATOPIONY!" << endl;
+			}
+			else {
+				cout << "Pudlo." << endl;
+			}
+			delete wynikTrafienia;
+			Sleep(2000);
+
+			if (przeciwnik->czyPrzegrana()) {
+				cout << "\n\nGRATULACJE! Gracz " << nrGracza << " WYGRYWA!" << endl;
+				graTrwa = false;
+			}
+			else {
+				if (typG1 == 1 && typG2 == 1) {
+					cout << "Koniec tury. Przekaz sterowanie." << endl;
+					system("pause");
+					system("cls");
+				}
+
+				if (aktualnyGracz == g1) {
+					aktualnyGracz = g2;
+					przeciwnik = g1;
+					nrGracza = 2;
+					typAktualnegoGracza = typG2;
+				}
+				else {
+					aktualnyGracz = g1;
+					przeciwnik = g2;
+					nrGracza = 1;
+					typAktualnegoGracza = typG1;
+				}
+			}
+		}
+		cout << "\nCzy chcesz zagrac ponownie? (t - tak, n - nie): ";
+		cin >> ponownaGra;
+	} while (ponownaGra == 't' || ponownaGra == 'T');
 }
-	

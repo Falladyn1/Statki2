@@ -86,7 +86,7 @@ void gracz::rozmiescStatkiLosowo() {
                         czyPasuje = false;
                         break;
                     }
-                    buforStatku.push_back({ x, y });
+                    buforStatku.push_back({ x, y }); 
                 }
 
                 if (czyPasuje) {
@@ -96,8 +96,9 @@ void gracz::rozmiescStatkiLosowo() {
 
                     statek* wskaznikNaStatek = &flota.back();
 
-                    for (auto p : buforStatku) {
-                        statkiGracza.ustawPole(p.x, p.y, new OkretPos(wskaznikNaStatek, p.x, p.y));
+                    for (int m = 0; m < buforStatku.size(); m++) {
+                        PolaS punkt = buforStatku[m];
+                        statkiGracza.ustawPole(punkt.x, punkt.y, new OkretPos(wskaznikNaStatek, punkt.x, punkt.y));
                     }
 
                     postawiono = true;
@@ -177,4 +178,12 @@ void gracz::rozmiescStatkiRecznie() {
             }
         }
     }
+}
+
+bool gracz::czyPrzegrana() const {
+    for (int i = 0; i < flota.size(); i++) {
+        if (flota[i].czyZatopiony() == false)
+            return false;
+    }
+    return true;
 }
