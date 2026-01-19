@@ -127,6 +127,7 @@
     <ClCompile Include="gra.cpp" />
     <ClCompile Include="gracz.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="manager.cpp" />
     <ClCompile Include="OkretPos.cpp" />
     <ClCompile Include="SI.cpp" />
     <ClCompile Include="statek.cpp" />
@@ -135,6 +136,7 @@
     <ClInclude Include="czlowiek.h" />
     <ClInclude Include="gra.h" />
     <ClInclude Include="gracz.h" />
+    <ClInclude Include="manager.h" />
     <ClInclude Include="OkretPos.h" />
     <ClInclude Include="plansza.h" />
     <ClInclude Include="SI.h" />
