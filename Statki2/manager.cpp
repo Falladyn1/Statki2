@@ -80,7 +80,7 @@ void manager::Gra() {
 			cout << "SI rozmieszcza statki losowo..." << endl;
 			g1->rozmiescStatkiLosowo();
 		}
-		system("cls");
+		//system("cls");
 
 		cout << "Gracz 2 przygotowuje flote" << endl;
 		if (typG2 == 1) {
@@ -96,7 +96,7 @@ void manager::Gra() {
 			cout << "SI rozmieszcza statki losowo..." << endl;
 			g2->rozmiescStatkiLosowo();
 		}
-		system("cls");
+		//system("cls");
 
 		bool graTrwa = true;
 		gracz* aktualnyGracz = g1;
@@ -126,7 +126,7 @@ void manager::Gra() {
 
 			aktualnyGracz->pobierzPlanszeStrzalow().ustawPole(cel.x, cel.y, stanKratki);
 
-			system("cls");
+			//system("cls");
 			cout << "Gracz " << nrGracza << " strzela w " << char('A' + cel.x) << cel.y + 1 << endl;
 
 			if (wynikTrafienia->s != 0) {
@@ -147,7 +147,7 @@ void manager::Gra() {
 				if (typG1 == 1 && typG2 == 1) {
 					cout << "Koniec tury. Przekaz sterowanie." << endl;
 					system("pause");
-					system("cls");
+					//system("cls");
 				}
 
 				if (aktualnyGracz == g1) {
