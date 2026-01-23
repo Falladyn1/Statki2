@@ -121,7 +121,16 @@ void manager::Gra() {
 
 			kratka stanKratki = PUDLO;
 			if (wynikTrafienia->s != 0) {
-				stanKratki = TRAFIONY;
+				if (wynikTrafienia->s->czyZatopiony()){
+					stanKratki = ZATOPIONY;
+
+					vector <PolaS> polaStatku = wynikTrafienia->s->pobierzPolaS();
+
+					aktualnyGracz->pobierzPlanszeStrzalow().ustawWielePol(polaStatku, ZATOPIONY);
+				}
+				else {
+					stanKratki = TRAFIONY;
+				}
 			}
 
 			aktualnyGracz->pobierzPlanszeStrzalow().ustawPole(cel.x, cel.y, stanKratki);

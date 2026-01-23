@@ -19,4 +19,5 @@ public:
 	bool czyTrafiony(int, int) const;
 	bool czyZatopiony() const;
 	int pobierzRozmiar() const;
+	const vector<PolaS>& pobierzPolaS() const { return polaStatku; }
 };
