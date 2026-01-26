@@ -4,6 +4,13 @@
 #include "statek.h"
 #include <vector>
 
+class RozkladOkretowError : public std::exception {
+public:
+    const char* what() const noexcept override {
+        return "Nie da sie rozlozyc tych okretow";
+    }
+};
+
 class gracz {
 protected://zmiana z private na protected zeby klasy SI i czlowiek mialy dostep do tych pol
     int rozmiaryStatkow[10] = { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 };

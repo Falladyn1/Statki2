@@ -17,6 +17,8 @@ PolaS czlowiek::wykonajRuch() {
         int w;
         cin >> k >> w;
 
+  
+
         x = toupper(k) - 'A';
         y = w - 1;
 

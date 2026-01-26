@@ -106,6 +106,8 @@ void gracz::rozmiescStatkiLosowo() {
                 }
             }
             if (postawiono) break;
+            else
+                throw RozkladOkretowError();
         }
     }
 }
