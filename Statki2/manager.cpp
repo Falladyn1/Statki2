@@ -212,7 +212,7 @@ void manager::Gra() {
 			}
 		} while (ponownaGra == 't' || ponownaGra == 'T');
 	}
-	catch () {
-
+	catch (RozkladOkretowError) {
+		cout << "nie da sie rozmiescic tych okretow";
 	}
 }
