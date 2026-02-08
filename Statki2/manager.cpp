@@ -74,6 +74,7 @@ void manager::Gra() {
 	char ponownaGra = 't';
 	try {
 		do {
+			system("cls");
 			utworzGraczy();
 			cout << "---FAZA PRZYGOTOWAN---" << endl;
 
@@ -214,5 +215,11 @@ void manager::Gra() {
 	}
 	catch (RozkladOkretowError) {
 		cout << "nie da sie rozmiescic tych okretow";
+	}
+	catch (const ios_base::failure& e) {
+		cout << "Cos nie tak z cin";
+	}
+	catch (...) {
+		cout << "Ips jakis wyjatek";
 	}
 }
